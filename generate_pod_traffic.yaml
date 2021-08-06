@@ -1,0 +1,26 @@
+# Create NameSpace mypod #
+    
+ kubectl create ns mypod
+ 
+# Create pod pod1 #
+    
+ kubectl -n mypod run pod1 --image=nginx
+ 
+ # Expose pod1 to nodePort #
+      
+ kubectl -n mypod expose pod  pod1 --port=80 --type=NodePort
+ 
+ # Get nodeport of mypod #
+ 
+ kubectl -n mypod get svc
+ 
+# Curl to test getting nginx web page #
+
+  
+ curl 127.0.0.1:31675
+ 
+ # looping curl to generate traffic contineously #
+   
+  while true; do curl 127.0.0.1:31675; done
+  
+  # Wait for some minutes and go to grafana namespace mypod and you will get all metrics #
