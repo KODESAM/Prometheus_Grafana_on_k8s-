@@ -61,7 +61,35 @@ Visit localhost:9090, you will see Grafana dashboard
 By default, Prometheus operators deployed with some pre-configured Grafana dashboards are available by default. To see default dashboard click dashboard > manage
 
 
+Step 4: Get The List Of Metrics To Monitor
 
+When we deployed the Prometheus operator chart using Helm, and it includes not just Prometheus but these also deployed:
+
+prometheus-operator
+prometheus
+alertmanager
+node-exporter
+kube-state-metrics
+grafana
+service monitors to scrape internal kubernetes components
+kube-apiserver
+kube-scheduler
+kube-controller-manager
+etcd
+kube-dns/coredns
+Kube-proxy
+
+ #### Tools included like Kube-state-metrics scrape internal system metrics and we can get a list of that by port forwarding the Kube state metrics pod ###
+ 
+ $ kubectl port-forward -n prometheus prometheus-kube-state-metrics-5f89586745-hbcs4  8080
+
+Now visit localhost:8080/ and metricsand healthz that can be used to monitor the kubernetes cluster
+
+< http://localhost:8080 > 
+Kube Metrics
+
+    metrics
+    healthz
 
 
 
