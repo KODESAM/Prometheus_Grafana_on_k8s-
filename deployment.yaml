@@ -1,0 +1,67 @@
+Step 1: Creating Monitor Namespace
+
+$ kubectl create namespace prometheus
+
+Step 2: Installation Of Prometheus Operator
+
+We use the Helm chart of Prometheus operator to deploy Prometheus Grafana and many services that have been used to monitor kubernetes clusters.
+
+For details visit here https://github.com/helm/charts/tree/master/stable/prometheus-operator
+
+$ helm install prometheus stable/prometheus-operator --namespace prometheus
+
+###### To validate Prometheus installation ########
+
+$ kubectl get pods -n prometheus
+
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-prometheus-oper-alertmanager-0   2/2     Running   0          57m
+prometheus-grafana-6cffc5cff4-hvjzh                      2/2     Running   0          57m
+prometheus-kube-state-metrics-5f89586745-hbcs4           1/1     Running   0          57m
+prometheus-prometheus-node-exporter-xvq8g                1/1     Running   0          57m
+prometheus-prometheus-oper-operator-6d9c4bdb9f-s2jfz     2/2     Running   0          57m
+prometheus-prometheus-prometheus-oper-prometheus-0       3/3     Running   1          57m
+
+### we can visit Prometheus dashboard by the following command #####
+
+$ kubectl port-forward -n prometheus prometheus-prometheus-prometheus-oper-prometheus-0 9090
+
+Visit localhost:9090, you will see Prometheus dashboard
+
+Step 3: Configure Grafana Dashboard
+
+We can also access the Grafana dashboard by port forwarding the Grafana pod.
+
+$ kubectl port-forward -n prometheus prometheus-grafana-6cffc5cff4-hvjzh 3000
+
+##   You will get the Grafana dashboard username and password from getting a secret from prometheus-grafana ##
+
+apiVersion: v1
+data:
+  admin-password: cHJvbS1vcGVyYXRvcg==
+  admin-user: YWRtaW4=
+  ldap-toml: ""
+kind: Secret
+type: Opaque
+
+// with some other metadata
+
+echo YWRtaW4= | base64 -d
+
+$USER
+
+echo cHJvbS1vcGVyYXRvcg== | base64 -d
+
+$PASSWORD
+
+### Use these credential to access Grafana dashboard ####
+
+Visit localhost:9090, you will see Grafana dashboard
+
+By default, Prometheus operators deployed with some pre-configured Grafana dashboards are available by default. To see default dashboard click dashboard > manage
+
+
+
+
+
+
